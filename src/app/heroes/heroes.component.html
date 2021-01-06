@@ -1,0 +1,73 @@
+<div class="float-container">
+  <div class="float-child">
+    <h2>My Heroes</h2>
+    <div>
+      <div>
+        <label>Hero name:
+          <input #heroName />
+        </label>
+      </div>
+      <div>
+        <label>Hero age:
+          <input #heroAge />
+        </label>
+      </div>
+      <div>
+        <button (click)="add(heroName.value); heroName.value=''">
+          add
+        </button>
+      </div>
+    </div>
+
+    <ul class="heroes">
+      <li *ngFor="let hero of heroes">
+        <a routerLink="/detail/{{hero.id}}">
+          <span class="badge">{{hero.id}}</span> {{hero.name}} - {{hero.age}}
+        </a>
+        <button class="delete" title="delete hero"
+          (click)="delete(hero)">x</button>
+      </li>
+    </ul>
+  </div>
+  <div class="float-child">
+    <h2>My Heroes List</h2>
+    <div style="padding-right: 1px;">
+
+      <table style="width:99%" border="1" class="heroes">
+        <tr>
+          <td style="width:15%">ID</td>
+          <td style="width:35%">Name</td>
+          <td style="width:15%">Age</td>
+          <td style="width:35%">Action</td>
+        </tr>
+        <tr *ngFor="let hero of heroes">
+          <td>
+            <span ng-hide="editMode">{{hero.id}}</span>
+          </td>
+          <td>
+            <span ng-hide="editMode">{{hero.name}}</span>
+          </td>
+          <td>
+            <span ng-hide="editMode">{{hero.age}}</span>
+          </td>
+          <td>
+            <div class="material-icons">
+              <button style="background-color: skyblue;"
+                routerLink="/detail/{{hero.id}}" class="btn btn-secondary
+                btn-sm">
+                <!-- <i class="fa fa-search"></i> -->
+                Detail
+              </button>
+              <button style="background-color: red;" (click)="delete(hero)"
+                class="btn btn-danger btn-sm">
+                <!-- <i class="fa fa-times"></i> -->
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <ngb-pagination  [(page)]="page"
+        [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true"></ngb-pagination>
+    </div>
+  </div>
