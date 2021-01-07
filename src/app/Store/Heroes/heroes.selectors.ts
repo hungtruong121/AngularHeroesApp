@@ -1,4 +1,8 @@
 import { Observable } from 'rxjs';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Hero } from './hero';
+import { State } from './heroes.reducers';
+
+const featureHero = createFeatureSelector<State>('feature_Hero');
+
+export const getAllHeroes = createSelector(featureHero, (state: State) => state.data);
 

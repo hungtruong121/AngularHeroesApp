@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
-import { Hero } from '../Store/Heroes/hero';
+import { Hero } from '../model/hero';
 import { HeroService } from '../hero.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';

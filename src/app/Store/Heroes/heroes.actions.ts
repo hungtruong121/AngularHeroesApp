@@ -1,5 +1,5 @@
 import { Action, createAction, props } from '@ngrx/store';
-import { Hero } from './hero';
+import { Hero } from '../../model/hero';
 
 export const GET_HEROES = '[ALL] Heroes';
 export const GET_HEROES_SUCCESS = '[ALL] Heroes Success';
@@ -86,7 +86,7 @@ export class AddHeroError implements Action {
 
     }
 }
-///////////////
+
 export class RemoveHero implements Action {
     readonly type = DELETE_HERO;
     constructor(public payload: number){
@@ -107,7 +107,7 @@ export class RemoveHeroError implements Action {
 
     }
 }
-///////////////
+
 export class UpdateHero implements Action{
     readonly type = UPDATE_HERO;
     constructor(public payload: Hero){

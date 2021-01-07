@@ -20,7 +20,7 @@ import {
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { HeroesService } from '../../services/hero-service';
-import { Hero } from './hero';
+import { Hero } from '../../model/hero';
 import { catchError, map, switchMap} from 'rxjs/operators';
 import { ChildActivationEnd } from '@angular/router';
 

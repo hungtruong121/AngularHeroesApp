@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {AppState} from '../app.state';
-import { Hero } from '../Store/Heroes/hero';
+import { Hero } from '../model/hero';
 import {Observable} from 'rxjs';
 import * as heroesActions from '../Store/Heroes/heroes.actions';
 import {getAllHeroes} from '../Store/Heroes/heroes.reducers';

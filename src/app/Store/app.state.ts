@@ -1,5 +1,5 @@
-import { Hero } from './Heroes/hero';
+import { Hero } from '../model/hero';
 
 export interface AppState {
-    featureHero: Hero;
+    feature_Hero: Hero;
 }

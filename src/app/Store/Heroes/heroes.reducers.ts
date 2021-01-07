@@ -1,7 +1,7 @@
 import * as heroActions from './heroes.actions';
 import {AppAction} from '../../app.action';
 import {createFeatureSelector, createSelector} from '@ngrx/store';
-import { Hero } from './hero';
+import { Hero } from '../../model/hero';
 
 export interface State {
     data: Hero[];
@@ -20,157 +20,171 @@ const initialState: State = {
 };
 
 export function reducer(state = initialState, action: AppAction): State {
-    switch (action.type){
-        case heroActions.GET_HEROES:
-            return{
-                ...state,
-                action: heroActions.GET_HEROES,
-                done: false,
-                selected: null,
-                error: null,
-            };
-        case heroActions.GET_HEROES_SUCCESS:
-            return {
-                ...state,
-                action: action.payload,
-                done: true,
-                selected: null,
-                error: null
-            };
-        case heroActions.GET_HERO_ERROR:
-            return{
-                ...state,
-                done: true,
-                selected: null,
-                error: action.payload,
-            };
-        case heroActions.GET_HERO:
-            return{
-                ...state,
-                action: heroActions.GET_HERO,
-                done: false,
-                selected: null,
-                error: null,
-            };
-        case heroActions.GET_HERO_SUCCESS:
-            return{
-                ...state,
-                selected: action.payload,
-                done: true,
-                error: null,
-            };
-        case heroActions.GET_HERO_ERROR:
-            return{
-                ...state,
-                selected: null,
-                done: true,
-                error: action.payload,
-            };
-        case heroActions.CREATE_HERO:
-            return {
-                  ...state,
-                  selected: action.payload,
-                  action: heroActions.CREATE_HERO,
-                  done: false,
-                  error: null,
-                };
-        case heroActions.CREATE_HERO_SUCCESS:
-            {
-                const newHero = {
-                    ...state.selected,
-                    id: action.payload
-                };
-                const data = [
-                    ...state.data,
-                    newHero
-                ];
-                return {
-                    ...state,
-                    data,
-                    selected: null,
-                    error: null,
-                    done: true
-                };
-                }
-            case heroActions.CREATE_HERO_ERROR:
-                return {
-                  ...state,
-                  selected: null,
-                  done: true,
-                  error: action.payload
-                };
 
-                case heroActions.DELETE_HERO:
-      {
-        const selected = state.data.find(h => h.id === action.payload);
-        return {
-          ...state,
-          selected,
-          action: heroActions.DELETE_HERO,
-          done: false,
-          error: null
-        };
-      }
-    case heroActions.DELETE_HERO_SUCCESS:
-      {
-        const data = state.data.filter(h => h.id !== state.selected.id);
+  switch (action.type) {
+    /*************************
+   * GET all HEROs actions
+   ************************/
+  case heroActions.GET_HEROES:
+    return {
+      ...state,
+      action: heroActions.GET_HEROES,
+      done: false,
+      selected: null,
+      error: null
+    };
+  case heroActions.GET_HEROES_SUCCESS:
+    return {
+      ...state,
+      data: action.payload,
+      done: true,
+      selected: null,
+      error: null
+    };
+  case heroActions.GET_HEROES_ERROR:
+    return {
+      ...state,
+      done: true,
+      selected: null,
+      error: action.payload
+    };
+
+    /*************************
+   * GET HERO by id actions
+   ************************/
+  case heroActions.GET_HERO:
+    return {
+      ...state,
+      action: heroActions.GET_HERO,
+      done: false,
+      selected: null,
+      error: null
+    };
+  case heroActions.GET_HERO_SUCCESS:
+    return {
+      ...state,
+      selected: action.payload,
+      done: true,
+      error: null
+    };
+  case heroActions.GET_HERO_ERROR:
+    return {
+      ...state,
+      selected: null,
+      done: true,
+      error: action.payload
+    };
+
+    /*************************
+   * CREATE HERO actions
+   ************************/
+  case heroActions.CREATE_HERO:
+    return {
+      ...state,
+      selected: action.payload,
+      action: heroActions.CREATE_HERO,
+      done: false,
+      error: null
+    };
+  case heroActions.CREATE_HERO_SUCCESS:
+    {
+      const newHERO = {
+        ...state.selected,
+        id: action.payload
+      };
+      const data = [
+        ...state.data,
+        newHERO
+      ];
+      return {
+        ...state,
+        data,
+        selected: null,
+        error: null,
+        done: true
+      };
+    }
+  case heroActions.CREATE_HERO_ERROR:
+    return {
+      ...state,
+      selected: null,
+      done: true,
+      error: action.payload
+    };
+
+    /*************************
+   * UPDATE HERO actions
+   ************************/
+  case heroActions.UPDATE_HERO:
+    return {
+      ...state,
+      selected: action.payload,
+      action: heroActions.UPDATE_HERO,
+      done: false,
+      error: null
+    };
+  case heroActions.UPDATE_HERO_SUCCESS:
+    {
+      const index = state
+        .data
+        .findIndex(h => h.id === state.selected.id);
+      if (index >= 0) {
+        const data = [
+          ...state.data.slice(0, index),
+          state.selected,
+          ...state.data.slice(index + 1)
+        ];
         return {
           ...state,
           data,
+          done: true,
           selected: null,
-          error: null,
-          done: true
+          error: null
         };
       }
-    case heroActions.DELETE_HERO_ERROR:
+      return state;
+    }
+  case heroActions.UPDATE_HERO_ERROR:
+    return {
+      ...state,
+      done: true,
+      selected: null,
+      error: action.payload
+    };
+
+    /*************************
+   * DELETE HERO actions
+   ************************/
+  case heroActions.DELETE_HERO:
+    {
+      const selected = state.data.find(h => h.id === action.payload);
       return {
         ...state,
-        selected: null,
-        done: true,
-        error: action.payload
+        selected,
+        action: heroActions.DELETE_HERO,
+        done: false,
+        error: null
       };
     }
-    return state;
+  case heroActions.DELETE_HERO_SUCCESS:
+    {
+      const data = state.data.filter(h => h.id !== state.selected.id);
+      return {
+        ...state,
+        data,
+        selected: null,
+        error: null,
+        done: true
+      };
+    }
+  case heroActions.DELETE_HERO_ERROR:
+    return {
+      ...state,
+      selected: null,
+      done: true,
+      error: action.payload
+    };
 }
-export const getHeroesState = createFeatureSelector < State > ('heroes');
-export const getAllHeroes = createSelector(getHeroesState, (state: State) => state.data);
-export const getHero = createSelector(getHeroesState, (state: State) => {
-  if (state.action === heroActions.GET_HERO && state.done) {
-    return state.selected;
-  } else {
-    return null;
-  }
+  return state;
+}
 
-});
-export const isDeleted = createSelector(getHeroesState, (state: State) =>
-  state.action === heroActions.DELETE_HERO && state.done && !state.error);
-export const isCreated = createSelector(getHeroesState, (state: State) =>
- state.action === heroActions.CREATE_HERO && state.done && !state.error);
-export const isUpdated = createSelector(getHeroesState, (state: State) =>
- state.action === heroActions.UPDATE_HERO && state.done && !state.error);
-
-export const getDeleteError = createSelector(getHeroesState, (state: State) => {
-  return state.action === heroActions.DELETE_HERO
-    ? state.error
-   : null;
-});
-export const getCreateError = createSelector(getHeroesState, (state: State) => {
-  return state.action === heroActions.CREATE_HERO
-    ? state.error
-   : null;
-});
-export const getUpdateError = createSelector(getHeroesState, (state: State) => {
-  return state.action === heroActions.UPDATE_HERO
-    ? state.error
-   : null;
-});
-export const getGamesError = createSelector(getHeroesState, (state: State) => {
-  return state.action === heroActions.GET_HEROES
-    ? state.error
-   : null;
-});
-export const getGameError = createSelector(getHeroesState, (state: State) => {
-  return state.action === heroActions.GET_HERO
-    ? state.error
-   : null;
-});
